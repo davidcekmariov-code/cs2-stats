@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CS2 Stats</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #0b0f14;
+            color: white;
+        }
+
+        /* HEADER */
+
+        header {
+            height: 70px;
+            background: #111720;
+            border-bottom: 1px solid #242c36;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 7%;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #f5a623;
+        }
+
+        nav a {
+            color: #aaa;
+            text-decoration: none;
+            margin-left: 25px;
+        }
+
+        nav a:hover {
+            color: white;
+        }
+
+        /* MAIN */
+
+        main {
+            width: 86%;
+            max-width: 1200px;
+            margin: 40px auto;
+        }
+
+        /* SEARCH */
+
+        .search-box {
+            position: relative;
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .search-box input {
+            flex: 1;
+
+            padding: 15px;
+
+            background: #151c25;
+            border: 1px solid #29323e;
+            border-radius: 8px;
+
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .search-box input:focus {
+            border-color: #f5a623;
+        }
+
+        .search-box button {
+            padding: 0 30px;
+
+            background: #f5a623;
+            color: #111;
+
+            border: none;
+            border-radius: 8px;
+
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .search-box button:hover {
+            background: #ffb83d;
+        }
+
+        /* SEARCH RESULTS */
+
+        #searchResults {
+            background: #111720;
+            border: 1px solid #242c36;
+            border-radius: 8px;
+
+            margin-bottom: 25px;
+
+            overflow: hidden;
+
+            display: none;
+        }
+
+        .search-player {
+            padding: 13px 18px;
+            cursor: pointer;
+            border-bottom: 1px solid #242c36;
+        }
+
+        .search-player:hover {
+            background: #1b232d;
+        }
+
+        .search-player:last-child {
+            border-bottom: none;
+        }
+
+        /* PROFILE */
+
+        .profile {
+            background: #111720;
+            border: 1px solid #242c36;
+            border-radius: 12px;
+
+            padding: 25px;
+
+            display: flex;
+            align-items: center;
+            gap: 20px;
+
+            margin-bottom: 25px;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+
+            border-radius: 50%;
+
+            background: #f5a623;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: #111;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .profile h1 {
+            margin-bottom: 7px;
+        }
+
+        .profile p {
+            color: #888;
+        }
+
+        /* STATS */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: #111720;
+
+            border: 1px solid #242c36;
+            border-radius: 12px;
+
+            padding: 22px;
+        }
+
+        .stat-card p {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card h2 {
+            font-size: 28px;
+        }
+
+        /* CONTENT */
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background: #111720;
+
+            border: 1px solid #242c36;
+            border-radius: 12px;
+
+            padding: 25px;
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+        }
+
+        /* MAPS */
+
+        .map {
+            margin-bottom: 20px;
+        }
+
+        .map-header {
+            display: flex;
+            justify-content: space-between;
+
+            margin-bottom: 7px;
+        }
+
+        .map-header span:last-child {
+            color: #f5a623;
+        }
+
+        .bar {
+            height: 8px;
+
+            background: #252d37;
+
+            border-radius: 10px;
+
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: #f5a623;
+        }
+
+        /* GRAPH */
+
+        .graph {
+            height: 200px;
+
+            display: flex;
+            align-items: end;
+
+            gap: 12px;
+
+            padding-top: 20px;
+        }
+
+        .graph-bar {
+            flex: 1;
+
+            background: #f5a623;
+
+            border-radius: 5px 5px 0 0;
+
+            min-height: 20px;
+        }
+
+        /* FOOTER */
+
+        footer {
+            text-align: center;
+
+            color: #666;
+
+            padding: 30px;
+
+            margin-top: 50px;
+
+            border-top: 1px solid #242c36;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 800px) {
+
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .profile {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .search-box {
+                flex-direction: column;
+            }
+
+            .search-box button {
+                padding: 14px;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+<header>
+
+    <div class="logo">
+        CS<span>2</span> Stats
+    </div>
+
+    <nav>
+        <a href="#">Головна</a>
+        <a href="#">Гравці</a>
+        <a href="#">Матчі</a>
+    </nav>
+
+</header>
+
+
+<main>
+
+    <!-- ПОШУК -->
+
+    <div class="search-box">
+
+        <input
+            type="text"
+            id="playerInput"
+            placeholder="Введіть нікнейм гравця..."
+            autocomplete="off"
+        >
+
+        <button onclick="searchPlayer()">
+            Знайти
+        </button>
+
+    </div>
+
+
+    <!-- РЕЗУЛЬТАТИ ПОШУКУ -->
+
+    <div id="searchResults"></div>
+
+
+    <!-- ПРОФІЛЬ -->
+
+    <section class="profile">
+
+        <div class="avatar" id="avatar">
+            S
+        </div>
+
+        <div>
+
+            <h1 id="playerName">
+                s1mple
+            </h1>
+
+            <p>
+                Counter-Strike 2 Player
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- СТАТИСТИКА -->
+
+    <section class="stats">
+
+        <div class="stat-card">
+            <p>K/D Ratio</p>
+            <h2 id="kd">1.42</h2>
+        </div>
+
+        <div class="stat-card">
+            <p>Kills</p>
+            <h2 id="kills">8,421</h2>
+        </div>
+
+        <div class="stat-card">
+            <p>Deaths</p>
+            <h2 id="deaths">5,930</h2>
+        </div>
+
+        <div class="stat-card">
+            <p>Win Rate</p>
+            <h2 id="winrate">58%</h2>
+        </div>
+
+    </section>
+
+
+    <!-- НИЖНЯ ЧАСТИНА -->
+
+    <section class="content">
+
+        <!-- КАРТИ -->
+
+        <div class="card">
+
+            <h2>Статистика карт</h2>
+
+            <div class="map">
+
+                <div class="map-header">
+                    <span>Mirage</span>
+                    <span id="mirage">67%</span>
+                </div>
+
+                <div class="bar">
+                    <div
+                        class="bar-fill"
+                        id="mirageBar"
+                        style="width: 67%"
+                    ></div>
+                </div>
+
+            </div>
+
+
+            <div class="map">
+
+                <div class="map-header">
+                    <span>Dust II</span>
+                    <span id="dust">61%</span>
+                </div>
+
+                <div class="bar">
+                    <div
+                        class="bar-fill"
+                        id="dustBar"
+                        style="width: 61%"
+                    ></div>
+                </div>
+
+            </div>
+
+
+            <div class="map">
+
+                <div class="map-header">
+                    <span>Inferno</span>
+                    <span id="inferno">54%</span>
+                </div>
+
+                <div class="bar">
+                    <div
+                        class="bar-fill"
+                        id="infernoBar"
+                        style="width: 54%"
+                    ></div>
+                </div>
+
+            </div>
+
+
+            <div class="map">
+
+                <div class="map-header">
+                    <span>Ancient</span>
+                    <span id="ancient">49%</span>
+                </div>
+
+                <div class="bar">
+                    <div
+                        class="bar-fill"
+                        id="ancientBar"
+                        style="width: 49%"
+                    ></div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ГРАФІК -->
+
+        <div class="card">
+
+            <h2>Останні матчі</h2>
+
+            <div class="graph">
+
+                <div class="graph-bar" style="height:70%"></div>
+                <div class="graph-bar" style="height:40%"></div>
+                <div class="graph-bar" style="height:85%"></div>
+                <div class="graph-bar" style="height:55%"></div>
+                <div class="graph-bar" style="height:90%"></div>
+                <div class="graph-bar" style="height:65%"></div>
+                <div class="graph-bar" style="height:75%"></div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+    CS2 Stats © 2026
+</footer>
+
+
+<script>
+
+    /* =================================
+       30 ГРАВЦІВ
+    ================================= */
+
+    const players = [
+
+        {
+            name: "s1mple",
+            kd: 1.42,
+            kills: 8421,
+            deaths: 5930,
+            winrate: 58
+        },
+
+        {
+            name: "ZywOo",
+            kd: 1.35,
+            kills: 9210,
+            deaths: 6820,
+            winrate: 63
+        },
+
+        {
+            name: "NiKo",
+            kd: 1.28,
+            kills: 7850,
+            deaths: 6120,
+            winrate: 57
+        },
+
+        {
+            name: "donk",
+            kd: 1.31,
+            kills: 6540,
+            deaths: 4990,
+            winrate: 64
+        },
+
+        {
+            name: "m0NESY",
+            kd: 1.30,
+            kills: 7320,
+            deaths: 5630,
+            winrate: 62
+        },
+
+        {
+            name: "device",
+            kd: 1.18,
+            kills: 8100,
+            deaths: 6860,
+            winrate: 55
+        },
+
+        {
+            name: "ropz",
+            kd: 1.17,
+            kills: 7450,
+            deaths: 6370,
+            winrate: 56
+        },
+
+        {
+            name: "frozen",
+            kd: 1.16,
+            kills: 7010,
+            deaths: 6050,
+            winrate: 55
+        },
+
+        {
+            name: "broky",
+            kd: 1.19,
+            kills: 7780,
+            deaths: 6540,
+            winrate: 59
+        },
+
+        {
+            name: "Twistzz",
+            kd: 1.12,
+            kills: 8300,
+            deaths: 7410,
+            winrate: 54
+        },
+
+        {
+            name: "electroNic",
+            kd: 1.13,
+            kills: 8050,
+            deaths: 7120,
+            winrate: 53
+        },
+
+        {
+            name: "b1t",
+            kd: 1.15,
+            kills: 6940,
+            deaths: 6030,
+            winrate: 58
+        },
+
+        {
+            name: "w0nderful",
+            kd: 1.20,
+            kills: 6430,
+            deaths: 5350,
+            winrate: 61
+        },
+
+        {
+            name: "jL",
+            kd: 1.14,
+            kills: 6720,
+            deaths: 5900,
+            winrate: 60
+        },
+
+        {
+            name: "NertZ",
+            kd: 1.11,
+            kills: 6240,
+            deaths: 5620,
+            winrate: 56
+        },
+
+        {
+            name: "EliGE",
+            kd: 1.13,
+            kills: 8500,
+            deaths: 7510,
+            winrate: 52
+        },
+
+        {
+            name: "stavn",
+            kd: 1.12,
+            kills: 7100,
+            deaths: 6340,
+            winrate: 55
+        },
+
+        {
+            name: "jabbi",
+            kd: 1.10,
+            kills: 6850,
+            deaths: 6210,
+            winrate: 54
+        },
+
+        {
+            name: "cadiaN",
+            kd: 1.04,
+            kills: 5900,
+            deaths: 5670,
+            winrate: 51
+        },
+
+        {
+            name: "KSCERATO",
+            kd: 1.16,
+            kills: 7200,
+            deaths: 6210,
+            winrate: 57
+        },
+
+        {
+            name: "yuurih",
+            kd: 1.10,
+            kills: 7030,
+            deaths: 6390,
+            winrate: 53
+        },
+
+        {
+            name: "HObbit",
+            kd: 1.08,
+            kills: 7600,
+            deaths: 7030,
+            winrate: 52
+        },
+
+        {
+            name: "Ax1Le",
+            kd: 1.09,
+            kills: 7350,
+            deaths: 6740,
+            winrate: 54
+        },
+
+        {
+            name: "sh1ro",
+            kd: 1.21,
+            kills: 6980,
+            deaths: 5770,
+            winrate: 60
+        },
+
+        {
+            name: "chopper",
+            kd: 1.03,
+            kills: 6010,
+            deaths: 5840,
+            winrate: 52
+        },
+
+        {
+            name: "magixx",
+            kd: 1.07,
+            kills: 6200,
+            deaths: 5790,
+            winrate: 55
+        },
+
+        {
+            name: "Boombl4",
+            kd: 1.06,
+            kills: 6650,
+            deaths: 6270,
+            winrate: 53
+        },
+
+        {
+            name: "Perfecto",
+            kd: 1.09,
+            kills: 6400,
+            deaths: 5870,
+            winrate: 56
+        },
+
+        {
+            name: "rain",
+            kd: 1.08,
+            kills: 8120,
+            deaths: 7500,
+            winrate: 54
+        },
+
+        {
+            name: "XANTARES",
+            kd: 1.22,
+            kills: 7900,
+            deaths: 6460,
+            winrate: 59
+        }
+
+    ];
+
+
+    /* =================================
+       ПОКАЗАТИ ГРАВЦЯ
+    ================================= */
+
+    function showPlayer(player) {
+
+        document.getElementById("playerName").textContent =
+            player.name;
+
+        document.getElementById("avatar").textContent =
+            player.name.charAt(0).toUpperCase();
+
+        document.getElementById("kd").textContent =
+            player.kd;
+
+        document.getElementById("kills").textContent =
+            player.kills.toLocaleString();
+
+        document.getElementById("deaths").textContent =
+            player.deaths.toLocaleString();
+
+        document.getElementById("winrate").textContent =
+            player.winrate + "%";
+
+
+        /* Трохи випадкової статистики карт
+           для демонстрації */
+
+        let mirage = Math.floor(Math.random() * 25) + 50;
+        let dust = Math.floor(Math.random() * 25) + 45;
+        let inferno = Math.floor(Math.random() * 25) + 45;
+        let ancient = Math.floor(Math.random() * 25) + 40;
+
+
+        document.getElementById("mirage").textContent =
+            mirage + "%";
+
+        document.getElementById("mirageBar").style.width =
+            mirage + "%";
+
+
+        document.getElementById("dust").textContent =
+            dust + "%";
+
+        document.getElementById("dustBar").style.width =
+            dust + "%";
+
+
+        document.getElementById("inferno").textContent =
+            inferno + "%";
+
+        document.getElementById("infernoBar").style.width =
+            inferno + "%";
+
+
+        document.getElementById("ancient").textContent =
+            ancient + "%";
+
+        document.getElementById("ancientBar").style.width =
+            ancient + "%";
+
+
+        document.getElementById("searchResults").style.display =
+            "none";
+    }
+
+
+    /* =================================
+       ПОШУК
+    ================================= */
+
+    function searchPlayer() {
+
+        const input =
+            document.getElementById("playerInput");
+
+        const query =
+            input.value.toLowerCase().trim();
+
+
+        if (query === "") {
+
+            alert("Введіть нікнейм!");
+
+            return;
+        }
+
+
+        const player =
+            players.find(
+                p => p.name.toLowerCase() === query
+            );
+
+
+        if (player) {
+
+            showPlayer(player);
+
+        } else {
+
+            alert("Гравця не знайдено!");
+
+        }
+
+    }
+
+
+    /* =================================
+       ПОКАЗУЄМО ПІДКАЗКИ ПРИ ВВЕДЕННІ
+    ================================= */
+
+    document
+        .getElementById("playerInput")
+        .addEventListener("input", function () {
+
+            const query =
+                this.value.toLowerCase().trim();
+
+            const results =
+                document.getElementById("searchResults");
+
+
+            if (query === "") {
+
+                results.style.display = "none";
+
+                return;
+            }
+
+
+            const found =
+                players.filter(
+                    p =>
+                    p.name
+                    .toLowerCase()
+                    .includes(query)
+                );
+
+
+            if (found.length === 0) {
+
+                results.innerHTML =
+                    `<div class="search-player">
+                        Гравця не знайдено
+                    </div>`;
+
+                results.style.display = "block";
+
+                return;
+            }
+
+
+            results.innerHTML = "";
+
+
+            found.forEach(player => {
+
+                const item =
+                    document.createElement("div");
+
+                item.className =
+                    "search-player";
+
+                item.textContent =
+                    player.name;
+
+
+                item.onclick = function () {
+
+                    showPlayer(player);
+
+                    document
+                        .getElementById("playerInput")
+                        .value = player.name;
+
+                };
+
+
+                results.appendChild(item);
+
+            });
+
+
+            results.style.display = "block";
+
+        });
+
+
+    /* =================================
+       ENTER ДЛЯ ПОШУКУ
+    ================================= */
+
+    document
+        .getElementById("playerInput")
+        .addEventListener("keydown", function(event) {
+
+            if (event.key === "Enter") {
+
+                searchPlayer();
+
+            }
+
+        });
+
+</script>
+
+</body>
+</html>
